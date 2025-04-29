@@ -236,23 +236,23 @@ module linear_regression #(
   );
   
 
-  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_slope (
-    .num  (C10),
-      .tens (slope_ten),
-      .ones (slope_one)
-  );
+  // split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_slope (
+  //   .num  (C10),
+  //     .tens (slope_ten),
+  //     .ones (slope_one)
+  // );
 
-  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_b (
-    .num  (C00),
-      .tens (b_ten),
-      .ones (b_one)
-  );
+  // split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_b (
+  //   .num  (C00),
+  //     .tens (b_ten),
+  //     .ones (b_one)
+  // );
 
-  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_det (
-      .num  (det),
-      .tens (det_ten),
-      .ones (det_one)
-  );
+  // split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_det (
+  //     .num  (det),
+  //     .tens (det_ten),
+  //     .ones (det_one)
+  // );
 input_matrix #(
         .ELEM_WIDTH(`ELEM_WIDTH),
         .NUM_SAMPLES(`NUM_SAMPLES)
@@ -353,42 +353,42 @@ endmodule
 
 
 
-module unpack_C
-  #(
-    parameter RESULT_WIDTH = 32  // width of each matrix element
-  )
-  (
-    input  logic [2*`RESULT_WIDTH-1:0] C_packed,
-    output logic signed [`RESULT_WIDTH-1:0] C00,  
-    output logic signed [`RESULT_WIDTH-1:0] C10   
-  );
+// module unpack_C
+//   #(
+//     parameter RESULT_WIDTH = 32  // width of each matrix element
+//   )
+//   (
+//     input  logic [2*`RESULT_WIDTH-1:0] C_packed,
+//     output logic signed [`RESULT_WIDTH-1:0] C00,  
+//     output logic signed [`RESULT_WIDTH-1:0] C10   
+//   );
 
-  // LSB chunk = C[0][0], MSB chunk = C[1][0]
-  assign C00 = C_packed[`RESULT_WIDTH-1 : 0];
-  assign C10 = C_packed[2*`RESULT_WIDTH-1 : `RESULT_WIDTH];
+//   // LSB chunk = C[0][0], MSB chunk = C[1][0]
+//   assign C00 = C_packed[`RESULT_WIDTH-1 : 0];
+//   assign C10 = C_packed[2*`RESULT_WIDTH-1 : `RESULT_WIDTH];
 
-endmodule
+// endmodule
 
-module split_digits #(
-    parameter RESULT_WIDTH = 8  
-)(
-    input  logic signed [`RESULT_WIDTH-1:0] num,  
-    output logic [3:0] tens,                     
-    output logic [3:0] ones                    
-);
+// module split_digits #(
+//     parameter RESULT_WIDTH = 8  
+// )(
+//     input  logic signed [`RESULT_WIDTH-1:0] num,  
+//     output logic [3:0] tens,                     
+//     output logic [3:0] ones                    
+// );
 
-    // Get absolute value for display purposes
-    logic [`RESULT_WIDTH-1:0] abs_num;
+//     // Get absolute value for display purposes
+//     logic [`RESULT_WIDTH-1:0] abs_num;
 
-    always_comb begin
-        abs_num = (num < 0) ? -num : num;
-    end
+//     always_comb begin
+//         abs_num = (num < 0) ? -num : num;
+//     end
 
-    // Tens and ones extraction
-    assign tens = abs_num / 10;
-    assign ones = abs_num % 10;
+//     // Tens and ones extraction
+//     assign tens = abs_num / 10;
+//     assign ones = abs_num % 10;
 
-endmodule
+// endmodule
 
 
 
