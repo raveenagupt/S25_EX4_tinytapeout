@@ -1,10 +1,10 @@
 
 
 
-`define ELEM_WIDTH 14
+`define ELEM_WIDTH 12
 `define NUM_FEATURES 2
 `define NUM_SAMPLES 3
-`define RESULT_WIDTH 14
+`define RESULT_WIDTH 12
 
 module inverse #(
     parameter ELEM_WIDTH = 32,
