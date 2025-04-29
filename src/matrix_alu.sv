@@ -100,7 +100,7 @@ module matrix_multiply #(
     parameter ROWS_A = 5,
     parameter COLS_A = 2,
     parameter COLS_B = 5,
-    parameter ELEM_WIDTH = 4,
+    parameter ELEM_WIDTH = 14,
     parameter RESULT_WIDTH = 2 * ELEM_WIDTH
 )(
     input  wire clk,
@@ -156,10 +156,9 @@ endmodule
 
 
 
-
 module input_matrix #(
-    parameter ELEM_WIDTH = 32,
-    parameter NUM_SAMPLES = 5
+    parameter ELEM_WIDTH = 14,
+    parameter NUM_SAMPLES = 3
 )(
     input  logic clk,
     input  logic rst,
@@ -172,19 +171,17 @@ module input_matrix #(
     output logic ready
 );
 
-
     assign x_data = {
-        32'd1, 32'd2, 
-        32'd1, 32'd5,  
-        32'd1, 32'd8,  
+        14'd1, 14'd2, 
+        14'd1, 14'd5,  
+        14'd1, 14'd8  
     };
 
     assign y_data = {
-        32'd3,
-        32'd6,
-        32'd9,
+        14'd3,
+        14'd6,
+        14'd9
     };
-
 
     assign error = 0;
     assign ready = 1;
@@ -196,10 +193,11 @@ endmodule
 
 
 
+
 module linear_regression #(
-    parameter ELEM_WIDTH = 32,
-    parameter RESULT_WIDTH = 32,
-    parameter NUM_SAMPLES = 5,
+    parameter ELEM_WIDTH = 14,
+    parameter RESULT_WIDTH = 14,
+    parameter NUM_SAMPLES = 3,
     parameter NUM_FEATURES = 2
 )(
     input logic clk,
