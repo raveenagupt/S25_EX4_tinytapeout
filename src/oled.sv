@@ -1,514 +1,752 @@
+module color_gen (
+    input  [9:0] x,
+    input  [9:0] y,
+    input  [3:0] slope_ten,
+    input  [3:0] slope_one,
+    input  [3:0] det_ten,
+    input  [3:0] det_one,
+    input  [3:0] b_ten,
+    input  [3:0] b_one,
+    input  [3:0] decode_value,
+    input   ready_input_matrix,
 
 
-module inverse #(
-    parameter ELEM_WIDTH = 32,
-    parameter RESULT_WIDTH = 32
-)(
-    input  logic clk,
-    input  logic rst,
-    input  logic start,
-    input  logic [4*ELEM_WIDTH-1:0] A_in,  
-    output logic [4*RESULT_WIDTH-1:0] A_inv, 
-    output logic done,
-    output logic invalid,
-  output logic signed [RESULT_WIDTH-1:0] det
+
+    output reg [15:0] oled_data
 );
 
-    logic  [ELEM_WIDTH-1:0] a, b, c, d;
-    assign {d, c, b, a} = A_in;
+    parameter X0 = 15;
+    parameter Y0 = 15;
 
-    logic  [RESULT_WIDTH-1:0] ad, bc;
+    reg [7:0] char_y     [0:7];
+    reg [7:0] char_eq    [0:7];
+    reg [7:0] char_0     [0:7];
+    reg [7:0] char_slash [0:7];
+    reg [7:0] char_x     [0:7];
+    reg [7:0] char_space [0:7];
+    reg [7:0] char_plus [0:7];
+    reg [7:0] char_1     [0:7];
+    reg [7:0] char_2     [0:7];
+    reg [7:0] char_3     [0:7];
+    reg [7:0] char_4     [0:7];
+    reg [7:0] char_5     [0:7];
+    reg [7:0] char_6     [0:7];
+    reg [7:0] char_7     [0:7];
+    reg [7:0] char_8    [0:7];
+    reg [7:0] char_9     [0:7];
+    reg [7:0] char_E    [0:7];
 
-    logic signed [RESULT_WIDTH-1:0] inv_a11, inv_a12, inv_a21, inv_a22;
+    initial begin
+        // y
+        char_y[0] = 8'b10000001;
+        char_y[1] = 8'b01000010;
+        char_y[2] = 8'b00100100;
+        char_y[3] = 8'b00011000;
+        char_y[4] = 8'b00011000;
+        char_y[5] = 8'b00011000;
+        char_y[6] = 8'b00011000;
+        char_y[7] = 8'b00011000;
 
-    always_comb begin
-        ad = a * d;  
-        bc = b * c;  
-        det = ad - bc;  
+        // =
+        char_eq[0] = 8'b00000000;
+        char_eq[1] = 8'b11111111;
+        char_eq[2] = 8'b00000000;
+        char_eq[3] = 8'b00000000;
+        char_eq[4] = 8'b11111111;
+        char_eq[5] = 8'b00000000;
+        char_eq[6] = 8'b00000000;
+        char_eq[7] = 8'b00000000;
 
-        if (det == 0) begin
-            inv_a11 = 0;
-            inv_a12 = 0;
-            inv_a21 = 0;
-            inv_a22 = 0;
-            invalid = 1;
-        end else begin
-          inv_a11 = (1* d);
-          inv_a12 = (-1 * $signed(b));
-          inv_a21 = (-1 * $signed(c));
-          inv_a22 = (1 * a);
-            invalid = 0;
+        // 0
+        char_0[0] = 8'b00111100;
+        char_0[1] = 8'b01000010;
+        char_0[2] = 8'b10000101;
+        char_0[3] = 8'b10001001;
+        char_0[4] = 8'b10010001;
+        char_0[5] = 8'b10100001;
+        char_0[6] = 8'b01000010;
+        char_0[7] = 8'b00111100;
 
-        end
+        // /
+        char_slash[0] = 8'b00000000;
+        char_slash[1] = 8'b00000010;
+        char_slash[2] = 8'b00000100;
+        char_slash[3] = 8'b00001000;
+        char_slash[4] = 8'b00010000;
+        char_slash[5] = 8'b00100000;
+        char_slash[6] = 8'b01000000;
+        char_slash[7] = 8'b00000000;
+
+        // x
+        char_x[0] = 8'b10000001;
+        char_x[1] = 8'b01000010;
+        char_x[2] = 8'b00100100;
+        char_x[3] = 8'b00011000;
+        char_x[4] = 8'b00011000;
+        char_x[5] = 8'b00100100;
+        char_x[6] = 8'b01000010;
+        char_x[7] = 8'b10000001;
+
+        // space
+        char_space[0] = 8'b00000000;
+        char_space[1] = 8'b00000000;
+        char_space[2] = 8'b00000000;
+        char_space[3] = 8'b00000000;
+        char_space[4] = 8'b00000000;
+        char_space[5] = 8'b00000000;
+        char_space[6] = 8'b00000000;
+        char_space[7] = 8'b00000000;
+
+        // +
+        char_plus[0] = 8'b00000000;
+        char_plus[1] = 8'b00011000;
+        char_plus[2] = 8'b00011000;
+        char_plus[3] = 8'b11111111;
+        char_plus[4] = 8'b00011000;
+        char_plus[5] = 8'b00011000;
+        char_plus[6] = 8'b00000000;
+        char_plus[7] = 8'b00000000;
+       
+        char_1[0] = 8'b00000010;
+        char_1[1] = 8'b00000110;
+        char_1[2] = 8'b00001010;
+        char_1[3] = 8'b00010010;
+        char_1[4] = 8'b00000010;
+        char_1[5] = 8'b00000010;
+        char_1[6] = 8'b00000010;
+        char_1[7] = 8'b00011111;
+
+        // 2
+        char_2[0] = 8'b00111100;
+        char_2[1] = 8'b01000010;
+        char_2[2] = 8'b00000010;
+        char_2[3] = 8'b00000010;
+        char_2[4] = 8'b00000100;
+        char_2[5] = 8'b00001000;
+        char_2[6] = 8'b00010000;
+        char_2[7] = 8'b00111111;
+
+        // 3
+        char_3[0] = 8'b00111100;
+        char_3[1] = 8'b01000010;
+        char_3[2] = 8'b00000010;
+        char_3[3] = 8'b00011110;
+        char_3[4] = 8'b00000010;
+        char_3[5] = 8'b01000010;
+        char_3[6] = 8'b01000010;
+        char_3[7] = 8'b00111100;
+
+        // 4
+        char_4[0] = 8'b00100010;
+        char_4[1] = 8'b00100010;
+        char_4[2] = 8'b00100010;
+        char_4[3] = 8'b00100010;
+        char_4[4] = 8'b00111110;
+        char_4[5] = 8'b00000010;
+        char_4[6] = 8'b00000010;
+        char_4[7] = 8'b00000010;
+
+        // 5
+        char_5[0] = 8'b00111110;
+        char_5[1] = 8'b01000000;
+        char_5[2] = 8'b01000000;
+        char_5[3] = 8'b00111100;
+        char_5[4] = 8'b00000010;
+        char_5[5] = 8'b01000010;
+        char_5[6] = 8'b01000010;
+        char_5[7] = 8'b00111100;
+
+        // 6
+        char_6[0] = 8'b00111100;
+        char_6[1] = 8'b01000000;
+        char_6[2] = 8'b01000000;
+        char_6[3] = 8'b00111100;
+        char_6[4] = 8'b01000010;
+        char_6[5] = 8'b01000010;
+        char_6[6] = 8'b01000010;
+        char_6[7] = 8'b00111100;
+
+        // 7
+        char_7[0] = 8'b00111110;
+        char_7[1] = 8'b00000010;
+        char_7[2] = 8'b00000010;
+        char_7[3] = 8'b00000110;
+        char_7[4] = 8'b00001000;
+        char_7[5] = 8'b00010000;
+        char_7[6] = 8'b00010000;
+        char_7[7] = 8'b00010000;
+
+        // 8
+        char_8[0] = 8'b00111100;
+        char_8[1] = 8'b01000010;
+        char_8[2] = 8'b01000010;
+        char_8[3] = 8'b00111100;
+        char_8[4] = 8'b01000010;
+        char_8[5] = 8'b01000010;
+        char_8[6] = 8'b01000010;
+        char_8[7] = 8'b00111100;
+
+        // 9
+        char_9[0] = 8'b00111100;
+        char_9[1] = 8'b01000010;
+        char_9[2] = 8'b01000010;
+        char_9[3] = 8'b00111110;
+        char_9[4] = 8'b00000010;
+        char_9[5] = 8'b01000010;
+        char_9[6] = 8'b01000010;
+        char_9[7] = 8'b00111100;
+
+
+        char_E[0] = 8'b01111100;
+        char_E[1] = 8'b01000000;
+        char_E[2] = 8'b01000000;
+        char_E[3] = 8'b01111110;
+        char_E[4] = 8'b01000000;
+        char_E[5] = 8'b01000000;
+        char_E[6] = 8'b01000000;
+        char_E[7] = 8'b01111100;
+
     end
 
-    always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
-            A_inv <= '0;
-            done <= 0;
-        end else if (start) begin
-          A_inv <= {inv_a22, inv_a21, inv_a12, inv_a11};
-            done <= 1;
-        end else begin
-            done <= 0;
-        end
+always @(*) begin
+    oled_data = 16'hFFFF; 
+
+
+    if ((y >= Y0 && y < Y0 + 8) && (x >= X0 && x < X0 + 104)) begin
+        integer col_index, bit_col, bit_row;
+        col_index = (x - X0) / 8;
+        bit_col = (x - X0) % 8;
+        bit_row = y - Y0;
+
+        case (col_index)
+            0: oled_data = char_y[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF;
+            1: oled_data = char_eq[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF;
+            2: oled_data = (slope_ten == 1) ? (char_1[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 2) ? (char_2[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 3) ? (char_3[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 4) ? (char_4[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 5) ? (char_5[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 6) ? (char_6[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 7) ? (char_7[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 8) ? (char_8[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 9) ? (char_9[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 10) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 11) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 12) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 13) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 14) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_ten == 15) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (char_0[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF);  
+            3: oled_data = (slope_one == 1) ? (char_1[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 2) ? (char_2[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 3) ? (char_3[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 4) ? (char_4[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 5) ? (char_5[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 6) ? (char_6[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 7) ? (char_7[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 8) ? (char_8[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 9) ? (char_9[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 10) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 11) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 12) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 13) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 14) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (slope_one == 15) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (char_0[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF);
+            4: oled_data = char_slash[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF;
+            5: oled_data = (det_ten == 1) ? (char_1[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 2) ? (char_2[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 3) ? (char_3[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 4) ? (char_4[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 5) ? (char_5[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 6) ? (char_6[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 7) ? (char_7[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 8) ? (char_8[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 9) ? (char_9[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (char_0[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF);
+            6: oled_data = (det_one == 1) ? (char_1[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 2) ? (char_2[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 3) ? (char_3[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 4) ? (char_4[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 5) ? (char_5[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 6) ? (char_6[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 7) ? (char_7[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 8) ? (char_8[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 9) ? (char_9[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (char_0[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF);
+            7: oled_data = char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF;
+
+            default: oled_data = 16'hFFFF;
+        endcase
     end
+    // Update for second row (y = Y0 + 8 to Y0 + 15)
+    else if ((y >= Y0 + 8 && y < Y0 + 16) && (x >= X0 && x < X0 + 104)) begin
+        integer col_index, bit_col, bit_row;
+        col_index = (x - X0) / 8;
+        bit_col = (x - X0) % 8;
+        bit_row = y - (Y0 + 8);  // Adjust bit row to display second line of text
 
-endmodule
+        case (col_index)
+            0: oled_data = char_plus[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF;
+            1: oled_data =(b_ten == 1) ? (char_1[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_ten == 2) ? (char_2[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_ten == 3) ? (char_3[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_ten == 4) ? (char_4[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_ten == 5) ? (char_5[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_ten == 6) ? (char_6[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_ten == 7) ? (char_7[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_ten == 8) ? (char_8[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_ten == 9) ? (char_9[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (char_0[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF);  
+            2: oled_data =(b_one == 1) ? (char_1[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_one == 2) ? (char_2[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_one == 3) ? (char_3[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_one == 4) ? (char_4[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_one == 5) ? (char_5[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_one == 6) ? (char_6[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_one == 7) ? (char_7[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_one == 8) ? (char_8[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (b_one == 9) ? (char_9[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (char_0[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF);  
+            3: oled_data = char_slash[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF;
+            4: oled_data = (det_ten == 1) ? (char_1[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 2) ? (char_2[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 3) ? (char_3[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 4) ? (char_4[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 5) ? (char_5[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 6) ? (char_6[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 7) ? (char_7[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 8) ? (char_8[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_ten == 9) ? (char_9[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (char_0[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF);
+            5: oled_data =  (det_one == 1) ? (char_1[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 2) ? (char_2[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 3) ? (char_3[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 4) ? (char_4[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 5) ? (char_5[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 6) ? (char_6[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 7) ? (char_7[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 8) ? (char_8[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (det_one == 9) ? (char_9[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (char_0[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF);
+            8: oled_data =  (decode_value == 1) ? (char_1[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 2) ? (char_2[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 3) ? (char_3[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 4) ? (char_4[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 5) ? (char_5[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 6) ? (char_6[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 7) ? (char_7[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 8) ? (char_8[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 9) ? (char_9[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 10) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 11) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 12) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 13) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 14) ? (char_E[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (decode_value == 15) ? (char_x[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF) :
+                          (char_0[bit_row][7 - bit_col] ? 16'h0000 : 16'hFFFF);
 
-
-module matrix_transpose #(
-    parameter N_ROWS = 4, 
-    parameter N_COLS = 2, 
-    parameter ELEM_WIDTH = 4  
-)(
-    input wire clk,
-    input wire rst,
-    input wire start,
-    input wire [N_ROWS * N_COLS * ELEM_WIDTH - 1:0] A_in,  
-    output reg [N_COLS * N_ROWS * ELEM_WIDTH - 1:0] A_transpose,  
-    output reg done
-);
-    reg [N_COLS * N_ROWS * ELEM_WIDTH - 1:0] result_comb;
-
-    integer i, j;
-
-    always_comb begin
-        for (i = 0; i < N_ROWS; i = i + 1) begin
-            for (j = 0; j < N_COLS; j = j + 1) begin
-                result_comb[(j * N_ROWS + i) * ELEM_WIDTH +: ELEM_WIDTH] = 
-                    A_in[(i * N_COLS + j) * ELEM_WIDTH +: ELEM_WIDTH];
-            end
-        end
-    end
-
-    always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
-            A_transpose <= '0;
-            done <= 1'b0;
-        end else if (start) begin
-            A_transpose <= result_comb;  
-            done <= 1'b1;  
-        end else begin
-            done <= 1'b0;  
-        end
-    end
-
-endmodule
-
-module matrix_multiply #(
-    parameter ROWS_A = 5,
-    parameter COLS_A = 2,
-    parameter COLS_B = 5,
-    parameter ELEM_WIDTH = 4,
-    parameter RESULT_WIDTH = 2 * ELEM_WIDTH
-)(
-    input  wire clk,
-    input  wire rst,
-    input  wire start,
-
-    input  wire [(ROWS_A*COLS_A*ELEM_WIDTH)-1:0] A_in,
-    input  wire [(COLS_A*COLS_B*ELEM_WIDTH)-1:0] B_in,
-  
-    
-    output reg  [(ROWS_A*COLS_B*RESULT_WIDTH)-1:0] C_out,
-    output reg  done
-);
-
-    logic [(ROWS_A*COLS_B*RESULT_WIDTH)-1:0] result_comb;
-    integer i, j, k;
-    logic [ELEM_WIDTH-1:0] a_elem, b_elem;
-    logic [RESULT_WIDTH-1:0] sum;
-
-always_comb begin
-    result_comb = '0;
-    for (i = 0; i < ROWS_A; i = i + 1) begin
-        for (j = 0; j < COLS_B; j = j + 1) begin
-            sum = '0;
-            for (k = 0; k < COLS_A; k = k + 1) begin
-                a_elem = A_in[(i*COLS_A + k)*ELEM_WIDTH +: ELEM_WIDTH];
-                b_elem = B_in[(k*COLS_B + j)*ELEM_WIDTH +: ELEM_WIDTH];
-                
-                sum += a_elem * b_elem;
-            end
-
-            result_comb[(i*COLS_B + j)*RESULT_WIDTH +: RESULT_WIDTH] = sum;
-        end
+            default: oled_data = 16'hFFFF;
+        endcase
     end
 end
 
+endmodule
 
-    always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
-            C_out <= '0;
-            done  <= 1'b0;
-        end else begin
-            if (start) begin
-                C_out <= result_comb;
-                done  <= 1'b1;
-            end else begin
-                done <= 1'b0;
-            end
+
+
+module convertXY(
+    input [`PIXELBIT:0] pixel_index,
+    output [`PIXELXYBIT:0] x, y
+    );
+    
+    assign x = pixel_index % `WIDTH;
+    assign y = pixel_index / `WIDTH;
+    
+endmodule
+
+
+
+module clk_divider(
+    input CLOCK, 
+    input [31:0] m,
+    output reg slowclk = 0
+    );
+    reg [31:0] count = 0;
+    
+    always @ (posedge CLOCK) begin
+        count <= (count == m) ? 0 : count + 1;
+        slowclk <= (count == 0) ? ~slowclk : slowclk;
+    end
+endmodule
+
+
+
+
+
+
+module Oled_Display(clk, reset, frame_begin, sending_pixels,
+  sample_pixel, pixel_index, pixel_data, cs, sdin, sclk, d_cn, resn, vccen,
+  pmoden);
+localparam Width = 96;
+localparam Height = 64;
+localparam PixelCount = Width * Height;
+localparam PixelCountWidth = $clog2(PixelCount);
+
+parameter ClkFreq = 6250000; // Hz
+input clk, reset;
+output frame_begin, sending_pixels, sample_pixel;
+output [PixelCountWidth-1:0] pixel_index;
+input [15:0] pixel_data;
+output cs, sdin, sclk, d_cn, resn, vccen, pmoden;
+
+// Frame begin event
+localparam FrameFreq = 60;
+localparam FrameDiv = ClkFreq / FrameFreq;
+localparam FrameDivWidth = $clog2(FrameDiv);
+
+reg [FrameDivWidth-1:0] frame_counter;
+assign frame_begin = frame_counter == 0;
+
+// State Machine
+localparam PowerDelay = 20; // ms
+localparam ResetDelay = 3; // us
+localparam VccEnDelay = 20; // ms
+localparam StartupCompleteDelay = 100; // ms
+
+localparam MaxDelay = StartupCompleteDelay;
+localparam MaxDelayCount = (ClkFreq * MaxDelay) / 1000;
+reg [$clog2(MaxDelayCount)-1:0] delay;
+
+localparam StateCount = 32;
+localparam StateWidth = $clog2(StateCount);
+
+localparam PowerUp = 5'b00000;
+localparam Reset = 5'b00001;
+localparam ReleaseReset = 5'b00011;
+localparam EnableDriver = 5'b00010;
+localparam DisplayOff = 5'b00110;
+localparam SetRemapDisplayFormat = 5'b00111;
+localparam SetStartLine = 5'b00101;
+localparam SetOffset = 5'b00100;
+localparam SetNormalDisplay = 5'b01100;
+localparam SetMultiplexRatio = 5'b01101;
+localparam SetMasterConfiguration = 5'b01111;
+localparam DisablePowerSave = 5'b01110;
+localparam SetPhaseAdjust = 5'b01010;
+localparam SetDisplayClock = 5'b01011;
+localparam SetSecondPrechargeA = 5'b01001;
+localparam SetSecondPrechargeB = 5'b01000;
+localparam SetSecondPrechargeC = 5'b11000;
+localparam SetPrechargeLevel = 5'b11001;
+localparam SetVCOMH = 5'b11011;
+localparam SetMasterCurrent = 5'b11010;
+localparam SetContrastA = 5'b11110;
+localparam SetContrastB = 5'b11111;
+localparam SetContrastC = 5'b11101;
+localparam DisableScrolling = 5'b11100;
+localparam ClearScreen = 5'b10100;
+localparam VccEn = 5'b10101;
+localparam DisplayOn = 5'b10111;
+localparam PrepareNextFrame = 5'b10110;
+localparam SetColAddress = 5'b10010;
+localparam SetRowAddress = 5'b10011;
+localparam WaitNextFrame = 5'b10001;
+localparam SendPixel = 5'b10000;
+
+assign sending_pixels = state == SendPixel;
+
+assign resn = state != Reset;
+assign d_cn = sending_pixels;
+assign vccen = state == VccEn || state == DisplayOn ||
+  state == PrepareNextFrame || state == SetColAddress ||
+  state == SetRowAddress || state == WaitNextFrame || state == SendPixel;
+assign pmoden = !reset;
+
+reg [15:0] color;
+
+reg [StateWidth-1:0] state;
+wire [StateWidth-1:0] next_state = fsm_next_state(state, frame_begin, pixel_index);
+
+function [StateWidth-1:0] fsm_next_state;
+  input [StateWidth-1:0] state;
+  input frame_begin;
+  input [PixelCountWidth-1:0] pixels_remain;
+  case (state)
+    PowerUp: fsm_next_state = Reset;
+    Reset: fsm_next_state = ReleaseReset;
+    ReleaseReset: fsm_next_state = EnableDriver;
+    EnableDriver: fsm_next_state = DisplayOff;
+    DisplayOff: fsm_next_state = SetRemapDisplayFormat;
+    SetRemapDisplayFormat: fsm_next_state = SetStartLine;
+    SetStartLine: fsm_next_state = SetOffset;
+    SetOffset: fsm_next_state = SetNormalDisplay;
+    SetNormalDisplay: fsm_next_state = SetMultiplexRatio;
+    SetMultiplexRatio: fsm_next_state = SetMasterConfiguration;
+    SetMasterConfiguration: fsm_next_state = DisablePowerSave;
+    DisablePowerSave: fsm_next_state = SetPhaseAdjust;
+    SetPhaseAdjust: fsm_next_state = SetDisplayClock;
+    SetDisplayClock: fsm_next_state = SetSecondPrechargeA;
+    SetSecondPrechargeA: fsm_next_state = SetSecondPrechargeB;
+    SetSecondPrechargeB: fsm_next_state = SetSecondPrechargeC;
+    SetSecondPrechargeC: fsm_next_state = SetPrechargeLevel;
+    SetPrechargeLevel: fsm_next_state = SetVCOMH;
+    SetVCOMH: fsm_next_state = SetMasterCurrent;
+    SetMasterCurrent: fsm_next_state = SetContrastA;
+    SetContrastA: fsm_next_state = SetContrastB;
+    SetContrastB: fsm_next_state = SetContrastC;
+    SetContrastC: fsm_next_state = DisableScrolling;
+    DisableScrolling: fsm_next_state = ClearScreen;
+    ClearScreen: fsm_next_state = VccEn;
+    VccEn: fsm_next_state = DisplayOn;
+    DisplayOn: fsm_next_state = PrepareNextFrame;
+    PrepareNextFrame: fsm_next_state = SetColAddress;
+    SetColAddress: fsm_next_state = SetRowAddress;
+    SetRowAddress: fsm_next_state = WaitNextFrame;
+    WaitNextFrame: fsm_next_state = frame_begin ? SendPixel : WaitNextFrame;
+    SendPixel: fsm_next_state = (pixel_index == PixelCount-1) ?
+      PrepareNextFrame : SendPixel;
+    default: fsm_next_state = PowerUp;
+  endcase
+endfunction
+
+// SPI Master
+localparam SpiCommandMaxWidth = 40;
+localparam SpiCommandBitCountWidth = $clog2(SpiCommandMaxWidth);
+
+reg [SpiCommandBitCountWidth-1:0] spi_word_bit_count;
+reg [SpiCommandMaxWidth-1:0] spi_word;
+
+wire spi_busy = spi_word_bit_count != 0;
+assign cs = !spi_busy;
+assign sclk = clk | !spi_busy;
+assign sdin = spi_word[SpiCommandMaxWidth-1] & spi_busy;
+
+// Video
+assign sample_pixel = (state == WaitNextFrame && frame_begin) ||
+  (sending_pixels && frame_counter[3:0] == 0);
+assign pixel_index = sending_pixels ?
+  frame_counter[FrameDivWidth-1:$clog2(16)] : 0;
+
+always @(negedge clk) begin
+  if (reset) begin
+    frame_counter <= 0;
+    delay <= 0;
+    state <= 0;
+    spi_word <= 0;
+    spi_word_bit_count <= 0;
+  end else begin
+    frame_counter <= (frame_counter == FrameDiv-1) ? 0 : frame_counter + 1;
+
+    if (spi_word_bit_count > 1) begin
+      spi_word_bit_count <= spi_word_bit_count - 1;
+      spi_word <= {spi_word[SpiCommandMaxWidth-2:0], 1'b0};
+    end else if (delay != 0) begin
+      spi_word <= 0;
+      spi_word_bit_count <= 0;
+      delay <= delay - 1;
+    end else begin
+      state <= next_state;
+      case (next_state)
+        PowerUp: begin
+          spi_word <= 0;
+          spi_word_bit_count <= 0;
+          delay <= (ClkFreq * PowerDelay) / 1000;
         end
-    end
-
-endmodule
-
-
-
-
-module input_matrix #(
-    parameter ELEM_WIDTH = 32,
-    parameter NUM_SAMPLES = 5
-)(
-    input  logic clk,
-    input  logic rst,
-    input  logic enter,
-    input  logic input_done, 
-    input  logic [`ELEM_WIDTH-1:0] data_in,
-    output logic [(`NUM_SAMPLES*2*`ELEM_WIDTH)-1:0] x_data,  
-    output logic [(`NUM_SAMPLES*`ELEM_WIDTH)-1:0] y_data,
-    output logic error,
-    output logic ready
-);
-
-    typedef enum logic [1:0] {
-      IDLE   = 2'd1,
-      READ_X = 2'd2,
-      READ_Y = 2'd3
-    } state_t;
-
-    logic enter_d;
-
-    always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
-            enter_d <= 0;
-        end else begin
-            enter_d <= enter;
+        Reset: begin
+          spi_word <= 0;
+          spi_word_bit_count <= 0;
+          delay <= (ClkFreq * ResetDelay) / 1000;
         end
-    end
-
-    wire enter_pulse = enter & ~enter_d;  
-
-    state_t state, next_state;
-
-    logic [$clog2(`NUM_SAMPLES*2+1)-1:0] x_index;  
-    logic [$clog2(`NUM_SAMPLES+1)-1:0] y_index;    
-    logic [(`NUM_SAMPLES*2*`ELEM_WIDTH)-1:0] x_reg;
-    logic [(`NUM_SAMPLES*`ELEM_WIDTH)-1:0] y_reg;
-
-    assign x_data = x_reg;
-    assign y_data = y_reg;
-
-    always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
-            state <= READ_X;
-            x_index <= 0;
-            y_index <= 0;
-            x_reg <= 0;
-            y_reg <= 0;
-            error <= 0;
-            ready <= 0;
-        end else begin
-            state <= next_state;
-
-            case (state)
-                IDLE: begin
-                    x_index <= 0;
-                    y_index <= 0;
-                    ready <= 1;
-
-                end
-
-                READ_X: begin
-                    if(input_done) begin 
-                        error <= 1;
-                    end
-
-                    if (enter_pulse && x_index < `NUM_SAMPLES * 2) begin
-                        x_reg[(x_index)*`ELEM_WIDTH +: `ELEM_WIDTH] <= 'd1;  //Include the bias
-                        x_reg[(x_index+1)*`ELEM_WIDTH +: `ELEM_WIDTH] <= data_in;
-                        x_index <= x_index + 2;
-                    end
-                end
-
-                READ_Y: begin
-                    if(input_done) begin 
-                        error <= 1;
-                    end
-
-                    if (enter_pulse && y_index < `NUM_SAMPLES) begin
-                        y_reg[y_index*`ELEM_WIDTH +: `ELEM_WIDTH] <= data_in;
-                        y_index <= y_index + 1;
-                    end
-                end
-            endcase
-
+        ReleaseReset: begin
+          spi_word <= 0;
+          spi_word_bit_count <= 0;
+          delay <= (ClkFreq * ResetDelay) / 1000;
         end
+        EnableDriver: begin
+          // Enable the driver
+          spi_word <= {16'hFD12, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        DisplayOff: begin
+          // Turn the display off
+          spi_word <= {8'hAE, {SpiCommandMaxWidth-8{1'b0}}};
+          spi_word_bit_count <= 8;
+          delay <= 1;
+        end
+        SetRemapDisplayFormat: begin
+          // Set the remap and display formats
+          spi_word <= {16'hA072, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetStartLine: begin
+          // Set the display start line to the top line
+          spi_word <= {16'hA100, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetOffset: begin
+          // Set the display offset to no vertical offset
+          spi_word <= {16'hA200, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetNormalDisplay: begin
+          // Make it a normal display with no color inversion or forcing
+          // pixels on/off
+          spi_word <= {8'hA4, {SpiCommandMaxWidth-8{1'b0}}};
+          spi_word_bit_count <= 8;
+          delay <= 1;
+        end
+        SetMultiplexRatio: begin
+          // Set the multiplex ratio to enable all of the common pins
+          // calculated by thr 1+register value
+          spi_word <= {16'hA83F, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetMasterConfiguration: begin
+          // Set the master configuration to use a required a required
+          // external Vcc supply.
+          spi_word <= {16'hAD8E, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        DisablePowerSave: begin
+          // Disable power saving mode.
+          spi_word <= {16'hB00B, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetPhaseAdjust: begin
+          // Set the phase length of the charge and dischare rates of
+          // an OLED pixel.
+          spi_word <= {16'hB131, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetDisplayClock: begin
+          // Set the display clock divide ration and oscillator frequency
+          spi_word <= {16'hB3F0, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetSecondPrechargeA: begin
+          // Set the second pre-charge speed of color A
+          spi_word <= {16'h8A64, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetSecondPrechargeB: begin
+          // Set the second pre-charge speed of color B
+          spi_word <= {16'h8B78, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetSecondPrechargeC: begin
+          // Set the second pre-charge speed of color C
+          spi_word <= {16'h8C64, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetPrechargeLevel: begin
+          // Set the pre-charge voltage to approximately 45% of Vcc
+          spi_word <= {16'hBB3A, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetVCOMH: begin
+          // Set the VCOMH deselect level
+          spi_word <= {16'hBE3E, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetMasterCurrent: begin
+          // Set the master current attenuation
+          spi_word <= {16'h8706, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetContrastA: begin
+          // Set the contrast for color A
+          spi_word <= {16'h8191, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetContrastB: begin
+          // Set the contrast for color B
+          spi_word <= {16'h8250, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        SetContrastC: begin
+          // Set the contrast for color C
+          spi_word <= {16'h837D, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 1;
+        end
+        DisableScrolling: begin
+          // Disable scrolling
+          spi_word <= {8'h25, {SpiCommandMaxWidth-8{1'b0}}};
+          spi_word_bit_count <= 8;
+          delay <= 1;
+        end
+        ClearScreen: begin
+          // Clear the screen
+          spi_word <= {40'h2500005F3F, {SpiCommandMaxWidth-40{1'b0}}};
+          spi_word_bit_count <= 40;
+          delay <= 1;
+        end
+        VccEn: begin
+          spi_word <= 0;
+          spi_word_bit_count <= 0;
+          delay <= (ClkFreq * VccEnDelay) / 1000;
+        end
+        DisplayOn: begin
+          // Turn the display on
+          spi_word <= {8'hAF, {SpiCommandMaxWidth-8{1'b0}}};
+          spi_word_bit_count <= 8;
+          delay <= (ClkFreq * StartupCompleteDelay) / 1000;
+        end
+        PrepareNextFrame: begin
+          // Deassert CS before beginning next frame
+          spi_word <= 0;
+          spi_word_bit_count <= 0;
+          delay <= 1;
+        end
+        SetColAddress: begin
+          // Set the column address
+          spi_word <= {24'h15005F, {SpiCommandMaxWidth-24{1'b0}}};
+          spi_word_bit_count <= 24;
+          delay <= 1;
+        end
+        SetRowAddress: begin
+          // Set the row address
+          spi_word <= {24'h75003F, {SpiCommandMaxWidth-24{1'b0}}};
+          spi_word_bit_count <= 24;
+          delay <= 1;
+        end
+        WaitNextFrame: begin
+          spi_word <= 0;
+          spi_word_bit_count <= 0;
+          delay <= 0;
+        end
+        SendPixel: begin
+          spi_word <= {pixel_data, {SpiCommandMaxWidth-16{1'b0}}};
+          spi_word_bit_count <= 16;
+          delay <= 0;
+        end
+        default: begin
+          spi_word <= 0;
+          spi_word_bit_count <= 0;
+          delay <= 0;
+        end
+      endcase
     end
-
-
-    always_comb begin
-        next_state = state;
-        case (state)
-            IDLE: 
-                if (y_index >= 1) begin
-                    next_state = READ_X;
-                end
-            READ_X: 
-                if (x_index >= `NUM_SAMPLES * 2) begin
-                    next_state = READ_Y;
-                end
-            READ_Y: 
-                if (y_index >= `NUM_SAMPLES) begin
-                    next_state = IDLE;
-                end
-        endcase
-    end
+  end
+end
 
 endmodule
-
-
-
-
-
-
-module linear_regression #(
-    parameter ELEM_WIDTH = 32,
-    parameter RESULT_WIDTH = 32,
-    parameter NUM_SAMPLES = 5,
-    parameter NUM_FEATURES = 2
-)(
-    input logic clk,
-    input logic rst,
-    input logic enter,                          
-    input logic [`ELEM_WIDTH-1:0] data_in,       
-    input logic input_done,  
-    output logic  ready_input_matrix, 
-    output logic [`NUM_SAMPLES * `NUM_FEATURES * `ELEM_WIDTH - 1:0] X_in,
-    output logic [`NUM_SAMPLES * `NUM_FEATURES * `ELEM_WIDTH - 1:0] y_in,
-    output logic error_det,                     
-    output logic error_values,
-    output logic [2 * `ELEM_WIDTH - 1:0] C_out_iny,  
-    output logic [3:0] slope_ten, slope_one,
-    output logic [3:0] b_ten, b_one,
-    output logic [3:0] det_ten, det_one,
-    output logic signed [`ELEM_WIDTH-1:0] det,       
-    output logic done_multiply_iny
-);
-
-    logic error_input_matrix;
-    logic done_transpose, done_multiply_XTX, done_multiply_XTy, done_inverse;
-    logic [`NUM_FEATURES * `NUM_SAMPLES * `ELEM_WIDTH - 1:0] X_transpose;   
-    logic [`NUM_FEATURES * `NUM_FEATURES * `ELEM_WIDTH - 1:0] X_transpose_X; 
-    logic [`NUM_FEATURES * `ELEM_WIDTH - 1:0] XT_y;                
-    logic [`NUM_FEATURES * `NUM_FEATURES * `ELEM_WIDTH - 1:0] X_inv; 
-    logic invalid;
-    logic flag_final;
-    logic signed [`RESULT_WIDTH-1:0] C00, C10;
-
-  unpack_C #(.RESULT_WIDTH(`RESULT_WIDTH))
-  uut_unpack (
-    .C_packed(C_out_iny),
-    .C00(C00),
-    .C10(C10)
-  );
-  
-
-  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_slope (
-    .num  (C10),
-      .tens (slope_ten),
-      .ones (slope_one)
-  );
-
-  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_b (
-    .num  (C00),
-      .tens (b_ten),
-      .ones (b_one)
-  );
-
-  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_det (
-      .num  (det),
-      .tens (det_ten),
-      .ones (det_one)
-  );
-input_matrix #(
-        .ELEM_WIDTH(`ELEM_WIDTH),
-        .NUM_SAMPLES(`NUM_SAMPLES)
-    ) matrix_xy (
-        .clk(clk),
-        .rst(rst),
-        .enter(enter),
-        .input_done(input_done),
-        .data_in(data_in),
-        .x_data(X_in),
-        .y_data(y_in),
-        .error(error_values),
-        .ready(ready_input_matrix)
-    );
-
-    // Transpose of X
-    matrix_transpose #(
-        .N_ROWS(`NUM_SAMPLES),
-        .N_COLS(`NUM_FEATURES),
-        .ELEM_WIDTH(`ELEM_WIDTH)
-    ) transpose_X (
-        .clk(clk),
-        .rst(rst),
-        .start(ready_input_matrix),
-        .A_in(X_in),
-        .A_transpose(X_transpose),
-        .done(done_transpose)
-    );
-
-    // Compute X^T * X
-    matrix_multiply #(
-        .ROWS_A(`NUM_FEATURES),
-        .COLS_A(`NUM_SAMPLES),
-        .COLS_B(`NUM_FEATURES),
-        .ELEM_WIDTH(`ELEM_WIDTH),
-        .RESULT_WIDTH(`RESULT_WIDTH)
-    ) multiply_XTX (
-        .clk(clk),
-        .rst(rst),
-        .start(done_transpose),
-        .A_in(X_transpose),
-        .B_in(X_in),
-        .C_out(X_transpose_X),
-        .done(done_multiply_XTX)
-    );
-
-    // Compute X^T * y
-    matrix_multiply #(
-        .ROWS_A(`NUM_FEATURES),
-        .COLS_A(`NUM_SAMPLES),
-        .COLS_B(1),
-        .ELEM_WIDTH(`ELEM_WIDTH),
-        .RESULT_WIDTH(`RESULT_WIDTH)
-    ) multiply_XTy (
-        .clk(clk),
-        .rst(rst),
-        .start(done_transpose),
-        .A_in(X_transpose),
-        .B_in(y_in),
-        .C_out(XT_y),
-        .done(done_multiply_XTy)
-    );
-
-    // Inverse of X^T * X
-    inverse #(
-        .ELEM_WIDTH(`RESULT_WIDTH),
-        .RESULT_WIDTH(`RESULT_WIDTH)
-    ) inverse_XTX (
-        .clk(clk),
-        .rst(rst),
-        .start(done_multiply_XTX),
-        .A_in(X_transpose_X),
-        .A_inv(X_inv),
-        .invalid(error_det),
-        .done(done_inverse),
-        .det(det)
-    );
-
-    // Final Regression: (X^T X)^-1 * (X^T y)
-    matrix_multiply #(
-      .ROWS_A(`NUM_SAMPLES),
-        .COLS_A(`NUM_FEATURES),
-        .COLS_B(1),
-        .ELEM_WIDTH(`ELEM_WIDTH),
-        .RESULT_WIDTH(`RESULT_WIDTH)
-    ) multiply_final (
-        .clk(clk),
-        .rst(rst),
-        .start(done_multiply_XTy),
-        .A_in(X_inv),
-        .B_in(XT_y),
-        .C_out(C_out_iny),
-        .done(done_multiply_iny)
-    );
-
-  
-endmodule
-
-
-
-module unpack_C
-  #(
-    parameter RESULT_WIDTH = 32  // width of each matrix element
-  )
-  (
-    input  logic [2*`RESULT_WIDTH-1:0] C_packed,
-    output logic signed [`RESULT_WIDTH-1:0] C00,  // element [0][0]
-    output logic signed [`RESULT_WIDTH-1:0] C10   // element [1][0]
-  );
-
-  // LSB chunk = C[0][0], MSB chunk = C[1][0]
-  assign C00 = C_packed[`RESULT_WIDTH-1 : 0];
-  assign C10 = C_packed[2*`RESULT_WIDTH-1 : `RESULT_WIDTH];
-
-endmodule
-
-module split_digits #(
-    parameter RESULT_WIDTH = 8  // Width of the input number
-)(
-    input  logic signed [`RESULT_WIDTH-1:0] num,  // Input number (signed)
-    output logic [3:0] tens,                     // Tens place
-    output logic [3:0] ones                      // Ones place
-);
-
-    // Get absolute value for display purposes
-    logic [`RESULT_WIDTH-1:0] abs_num;
-
-    always_comb begin
-        abs_num = (num < 0) ? -num : num;
-    end
-
-    // Tens and ones extraction
-    assign tens = abs_num / 10;
-    assign ones = abs_num % 10;
-
-endmodule
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
