@@ -42,10 +42,10 @@
 `define CHAR_G  7'b0010000
 
 
-`define ELEM_WIDTH 14
+`define ELEM_WIDTH 12
 `define NUM_FEATURES 2
 `define NUM_SAMPLES 3
-`define RESULT_WIDTH 14
+`define RESULT_WIDTH 12
 
 
 
