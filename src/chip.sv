@@ -101,32 +101,32 @@ logic signed [`ELEM_WIDTH-1:0] det;
 
 
 
-linear_regression #(
-    .ELEM_WIDTH(`ELEM_WIDTH),
-    .RESULT_WIDTH(`RESULT_WIDTH),
-    .NUM_SAMPLES(`NUM_SAMPLES),
-    .NUM_FEATURES(`NUM_FEATURES)
-) u1 (
-    .clk(clock),
-    .rst(reset),
-    .enter(enter),                          
-    .data_in(data_in),       
-    .input_done(input_done),  
-    .ready_input_matrix(ready_input_matrix), //output
-    .X_in(X_in), 
-    .y_in(y_in), 
-    .error_det(error_det),                     
-    .error_values(error_values),
-    .C_out_iny(C_out_iny),  
-    .slope_ten(slope_ten),
-    .slope_one(slope_one),
-    .b_ten(b_ten),
-    .b_one(b_one),
-    .det_ten(det_ten), 
-    .det_one(det_one),
-    .det(det),       
-    .done_multiply_iny(done_multiply_iny)
-);
+// linear_regression #(
+//     .ELEM_WIDTH(`ELEM_WIDTH),
+//     .RESULT_WIDTH(`RESULT_WIDTH),
+//     .NUM_SAMPLES(`NUM_SAMPLES),
+//     .NUM_FEATURES(`NUM_FEATURES)
+// ) u1 (
+//     .clk(clock),
+//     .rst(reset),
+//     .enter(enter),                          
+//     .data_in(data_in),       
+//     .input_done(input_done),  
+//     .ready_input_matrix(ready_input_matrix), //output
+//     .X_in(X_in), 
+//     .y_in(y_in), 
+//     .error_det(error_det),                     
+//     .error_values(error_values),
+//     .C_out_iny(C_out_iny),  
+//     .slope_ten(slope_ten),
+//     .slope_one(slope_one),
+//     .b_ten(b_ten),
+//     .b_one(b_one),
+//     .det_ten(det_ten), 
+//     .det_one(det_one),
+//     .det(det),       
+//     .done_multiply_iny(done_multiply_iny)
+// );
 
 always_ff @(posedge clock or posedge reset) begin
     if (reset) begin
