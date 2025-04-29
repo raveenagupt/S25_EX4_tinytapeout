@@ -236,23 +236,23 @@ module linear_regression #(
   );
   
 
-  // split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_slope (
-  //   .num  (C10),
-  //     .tens (slope_ten),
-  //     .ones (slope_one)
-  // );
+  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_slope (
+    .num  (C10),
+      .tens (slope_ten),
+      .ones (slope_one)
+  );
 
-  // split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_b (
-  //   .num  (C00),
-  //     .tens (b_ten),
-  //     .ones (b_one)
-  // );
+  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_b (
+    .num  (C00),
+      .tens (b_ten),
+      .ones (b_one)
+  );
 
-  // split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_det (
-  //     .num  (det),
-  //     .tens (det_ten),
-  //     .ones (det_one)
-  // );
+  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_det (
+      .num  (det),
+      .tens (det_ten),
+      .ones (det_one)
+  );
 input_matrix #(
         .ELEM_WIDTH(`ELEM_WIDTH),
         .NUM_SAMPLES(`NUM_SAMPLES)
@@ -269,18 +269,18 @@ input_matrix #(
     );
 
     // Transpose of X
-    matrix_transpose #(
-        .N_ROWS(`NUM_SAMPLES),
-        .N_COLS(`NUM_FEATURES),
-        .ELEM_WIDTH(`ELEM_WIDTH)
-    ) transpose_X (
-        .clk(clk),
-        .rst(rst),
-        .start(ready_input_matrix),
-        .A_in(X_in),
-        .A_transpose(X_transpose),
-        .done(done_transpose)
-    );
+    // matrix_transpose #(
+    //     .N_ROWS(`NUM_SAMPLES),
+    //     .N_COLS(`NUM_FEATURES),
+    //     .ELEM_WIDTH(`ELEM_WIDTH)
+    // ) transpose_X (
+    //     .clk(clk),
+    //     .rst(rst),
+    //     .start(ready_input_matrix),
+    //     .A_in(X_in),
+    //     .A_transpose(X_transpose),
+    //     .done(done_transpose)
+    // );
 
     // Compute X^T * X
     // matrix_multiply #(
