@@ -1,3 +1,36 @@
+
+`define WIDTH 96
+`define HEIGHT 64
+`define BLACK 16'b0
+`define WHITE ~`BLACK
+`define MAGENTA 16'b11111_000000_11111
+`define CYAN 16'b00000_111111_11111
+`define YELLOW 16'b11111_111111_00000
+`define GREEN 16'b00000_111111_00000
+`define RED 16'b11111_000000_00000
+`define BLUE 16'b00000_000000_11111
+`define ORANGE 16'b11111_100110_00000
+`define GREY 16'b01100_011000_01100
+
+// Bit numbers for various
+`define LDBIT       15
+`define OLEDBIT     15
+`define ANBIT       3
+`define SEGDPBIT    7
+`define SEGBIT      6 
+`define COLBIT      15 
+`define PIXELBIT    12 
+`define PIXELXYBIT  6
+`define CLR_AN  ~4'b0
+`define CLR_SEG ~8'b0
+
+
+
+`define ELEM_WIDTH 14
+`define NUM_FEATURES 2
+`define NUM_SAMPLES 3
+`define RESULT_WIDTH 14
+
 module color_gen (
     input  [9:0] x,
     input  [9:0] y,
