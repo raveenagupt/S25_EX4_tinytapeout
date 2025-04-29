@@ -228,45 +228,45 @@ module linear_regression #(
     logic flag_final;
     logic signed [`RESULT_WIDTH-1:0] C00, C10;
 
-  unpack_C #(.RESULT_WIDTH(`RESULT_WIDTH))
-  uut_unpack (
-    .C_packed(C_out_iny),
-    .C00(C00),
-    .C10(C10)
-  );
+//   unpack_C #(.RESULT_WIDTH(`RESULT_WIDTH))
+//   uut_unpack (
+//     .C_packed(C_out_iny),
+//     .C00(C00),
+//     .C10(C10)
+//   );
   
 
-  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_slope (
-    .num  (C10),
-      .tens (slope_ten),
-      .ones (slope_one)
-  );
+//   split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_slope (
+//     .num  (C10),
+//       .tens (slope_ten),
+//       .ones (slope_one)
+//   );
 
-  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_b (
-    .num  (C00),
-      .tens (b_ten),
-      .ones (b_one)
-  );
+//   split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_b (
+//     .num  (C00),
+//       .tens (b_ten),
+//       .ones (b_one)
+//   );
 
-  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_det (
-      .num  (det),
-      .tens (det_ten),
-      .ones (det_one)
-  );
-input_matrix #(
-        .ELEM_WIDTH(`ELEM_WIDTH),
-        .NUM_SAMPLES(`NUM_SAMPLES)
-    ) matrix_xy (
-        .clk(clk),
-        .rst(rst),
-        .enter(enter),
-        .input_done(input_done),
-        .data_in(data_in),
-        .x_data(X_in),
-        .y_data(y_in),
-        .error(error_values),
-        .ready(ready_input_matrix)
-    );
+//   split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_det (
+//       .num  (det),
+//       .tens (det_ten),
+//       .ones (det_one)
+//   );
+// input_matrix #(
+//         .ELEM_WIDTH(`ELEM_WIDTH),
+//         .NUM_SAMPLES(`NUM_SAMPLES)
+//     ) matrix_xy (
+//         .clk(clk),
+//         .rst(rst),
+//         .enter(enter),
+//         .input_done(input_done),
+//         .data_in(data_in),
+//         .x_data(X_in),
+//         .y_data(y_in),
+//         .error(error_values),
+//         .ready(ready_input_matrix)
+//     );
 
     // Transpose of X
     // matrix_transpose #(
