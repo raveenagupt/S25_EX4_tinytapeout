@@ -332,21 +332,21 @@ module linear_regression #(
     // );
 
     // Final Regression: (X^T X)^-1 * (X^T y)
-    matrix_multiply #(
-      .ROWS_A(`NUM_SAMPLES),
-        .COLS_A(`NUM_FEATURES),
-        .COLS_B(1),
-        .ELEM_WIDTH(`ELEM_WIDTH),
-        .RESULT_WIDTH(`RESULT_WIDTH)
-    ) multiply_final (
-        .clk(clk),
-        .rst(rst),
-        .start(done_multiply_XTy),
-        .A_in(X_inv),
-        .B_in(XT_y),
-        .C_out(C_out_iny),
-        .done(done_multiply_iny)
-    );
+    // matrix_multiply #(
+    //   .ROWS_A(`NUM_SAMPLES),
+    //     .COLS_A(`NUM_FEATURES),
+    //     .COLS_B(1),
+    //     .ELEM_WIDTH(`ELEM_WIDTH),
+    //     .RESULT_WIDTH(`RESULT_WIDTH)
+    // ) multiply_final (
+    //     .clk(clk),
+    //     .rst(rst),
+    //     .start(done_multiply_XTy),
+    //     .A_in(X_inv),
+    //     .B_in(XT_y),
+    //     .C_out(C_out_iny),
+    //     .done(done_multiply_iny)
+    // );
 
   
 endmodule
