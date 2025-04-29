@@ -159,13 +159,13 @@ color_gen my_color_gen (
 
 
 convertXY xy0(pixel_index, x, y);
-Oled_Display od0 (
-    .clk(clk6p25m), .reset(reset), .pixel_data(oled_data),
-    .frame_begin(frame_begin), .sending_pixels(sending_pixels),
-    .sample_pixel(sample_pixel), .pixel_index(pixel_index),
-    .cs(gn24), .sdin(gn23), .sclk(gn21), .d_cn(gp24),
-    .resn(gp23), .vccen(gp22), .pmoden(gp21)
-);
+// Oled_Display od0 (
+//     .clk(clk6p25m), .reset(reset), .pixel_data(oled_data),
+//     .frame_begin(frame_begin), .sending_pixels(sending_pixels),
+//     .sample_pixel(sample_pixel), .pixel_index(pixel_index),
+//     .cs(gn24), .sdin(gn23), .sclk(gn21), .d_cn(gp24),
+//     .resn(gp23), .vccen(gp22), .pmoden(gp21)
+// );
 
 logic [3:0] decode_value;
 logic [3:0] col;
