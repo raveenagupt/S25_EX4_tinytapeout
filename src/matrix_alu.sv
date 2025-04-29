@@ -1,10 +1,10 @@
 
 
 
-`define ELEM_WIDTH 12
+`define ELEM_WIDTH 14
 `define NUM_FEATURES 2
 `define NUM_SAMPLES 3
-`define RESULT_WIDTH 12
+`define RESULT_WIDTH 14
 
 module inverse #(
     parameter ELEM_WIDTH = 32,
@@ -14,7 +14,7 @@ module inverse #(
     input  logic rst,
     input  logic start,
     input  logic [4*ELEM_WIDTH-1:0] A_in,  
-    output logic [4*RESULT_WIDTH-1:0] A_inv, 
+    output logic [RESULT_WIDTH-1:0] A_inv, 
     output logic done,
     output logic invalid,
   output logic signed [RESULT_WIDTH-1:0] det
