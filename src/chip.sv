@@ -87,7 +87,7 @@ wire [`OLEDBIT:0] oled_data;
 logic enter, input_done;
 logic ready_input_matrix;
 logic  [3:0] slope_ten;
-logic  [3:0] slope_one,fake,fake1,fake2,fake3;
+logic  [3:0] slope_one;
 logic  [3:0] det_ten;
 logic  [3:0] det_one;
 logic  [3:0] b_ten;
@@ -113,8 +113,8 @@ linear_regression #(
     .data_in(data_in),       
     .input_done(input_done),  
     .ready_input_matrix(ready_input_matrix), //output
-    .X_in(X_in), //output
-    .y_in(y_in), //output
+    .X_in(X_in), 
+    .y_in(y_in), 
     .error_det(error_det),                     
     .error_values(error_values),
     .C_out_iny(C_out_iny),  
