@@ -283,53 +283,53 @@ input_matrix #(
     );
 
     // Compute X^T * X
-    matrix_multiply #(
-        .ROWS_A(`NUM_FEATURES),
-        .COLS_A(`NUM_SAMPLES),
-        .COLS_B(`NUM_FEATURES),
-        .ELEM_WIDTH(`ELEM_WIDTH),
-        .RESULT_WIDTH(`RESULT_WIDTH)
-    ) multiply_XTX (
-        .clk(clk),
-        .rst(rst),
-        .start(done_transpose),
-        .A_in(X_transpose),
-        .B_in(X_in),
-        .C_out(X_transpose_X),
-        .done(done_multiply_XTX)
-    );
+    // matrix_multiply #(
+    //     .ROWS_A(`NUM_FEATURES),
+    //     .COLS_A(`NUM_SAMPLES),
+    //     .COLS_B(`NUM_FEATURES),
+    //     .ELEM_WIDTH(`ELEM_WIDTH),
+    //     .RESULT_WIDTH(`RESULT_WIDTH)
+    // ) multiply_XTX (
+    //     .clk(clk),
+    //     .rst(rst),
+    //     .start(done_transpose),
+    //     .A_in(X_transpose),
+    //     .B_in(X_in),
+    //     .C_out(X_transpose_X),
+    //     .done(done_multiply_XTX)
+    // );
 
-    // Compute X^T * y
-    matrix_multiply #(
-        .ROWS_A(`NUM_FEATURES),
-        .COLS_A(`NUM_SAMPLES),
-        .COLS_B(1),
-        .ELEM_WIDTH(`ELEM_WIDTH),
-        .RESULT_WIDTH(`RESULT_WIDTH)
-    ) multiply_XTy (
-        .clk(clk),
-        .rst(rst),
-        .start(done_transpose),
-        .A_in(X_transpose),
-        .B_in(y_in),
-        .C_out(XT_y),
-        .done(done_multiply_XTy)
-    );
+    // // Compute X^T * y
+    // matrix_multiply #(
+    //     .ROWS_A(`NUM_FEATURES),
+    //     .COLS_A(`NUM_SAMPLES),
+    //     .COLS_B(1),
+    //     .ELEM_WIDTH(`ELEM_WIDTH),
+    //     .RESULT_WIDTH(`RESULT_WIDTH)
+    // ) multiply_XTy (
+    //     .clk(clk),
+    //     .rst(rst),
+    //     .start(done_transpose),
+    //     .A_in(X_transpose),
+    //     .B_in(y_in),
+    //     .C_out(XT_y),
+    //     .done(done_multiply_XTy)
+    // );
 
-    // Inverse of X^T * X
-    inverse #(
-        .ELEM_WIDTH(`RESULT_WIDTH),
-        .RESULT_WIDTH(`RESULT_WIDTH)
-    ) inverse_XTX (
-        .clk(clk),
-        .rst(rst),
-        .start(done_multiply_XTX),
-        .A_in(X_transpose_X),
-        .A_inv(X_inv),
-        .invalid(error_det),
-        .done(done_inverse),
-        .det(det)
-    );
+    // // Inverse of X^T * X
+    // inverse #(
+    //     .ELEM_WIDTH(`RESULT_WIDTH),
+    //     .RESULT_WIDTH(`RESULT_WIDTH)
+    // ) inverse_XTX (
+    //     .clk(clk),
+    //     .rst(rst),
+    //     .start(done_multiply_XTX),
+    //     .A_in(X_transpose_X),
+    //     .A_inv(X_inv),
+    //     .invalid(error_det),
+    //     .done(done_inverse),
+    //     .det(det)
+    // );
 
     // Final Regression: (X^T X)^-1 * (X^T y)
     matrix_multiply #(
