@@ -434,12 +434,12 @@ endmodule
 
 module unpack_C
   #(
-    parameter RESULT_WIDTH = 32  // width of each matrix element
+    parameter RESULT_WIDTH = 32  
   )
   (
     input  logic [2*`RESULT_WIDTH-1:0] C_packed,
-    output logic signed [`RESULT_WIDTH-1:0] C00,  // element [0][0]
-    output logic signed [`RESULT_WIDTH-1:0] C10   // element [1][0]
+    output logic signed [`RESULT_WIDTH-1:0] C00,  
+    output logic signed [`RESULT_WIDTH-1:0] C10   
   );
 
   // LSB chunk = C[0][0], MSB chunk = C[1][0]
@@ -451,9 +451,9 @@ endmodule
 module split_digits #(
     parameter RESULT_WIDTH = 8  // Width of the input number
 )(
-    input  logic signed [`RESULT_WIDTH-1:0] num,  // Input number (signed)
-    output logic [3:0] tens,                     // Tens place
-    output logic [3:0] ones                      // Ones place
+    input  logic signed [`RESULT_WIDTH-1:0] num,  
+    output logic [3:0] tens,                     
+    output logic [3:0] ones                      
 );
 
     // Get absolute value for display purposes
