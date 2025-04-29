@@ -172,99 +172,22 @@ module input_matrix #(
     output logic ready
 );
 
-    typedef enum logic [1:0] {
-      IDLE   = 2'd1,
-      READ_X = 2'd2,
-      READ_Y = 2'd3
-    } state_t;
 
-    logic enter_d;
+    assign x_data = {
+        32'd1, 32'd2, 
+        32'd1, 32'd5,  
+        32'd1, 32'd8,  
+    };
 
-    always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
-            enter_d <= 0;
-        end else begin
-            enter_d <= enter;
-        end
-    end
-
-    wire enter_pulse = enter & ~enter_d;  
-
-    state_t state, next_state;
-
-    logic [$clog2(`NUM_SAMPLES*2+1)-1:0] x_index;  
-    logic [$clog2(`NUM_SAMPLES+1)-1:0] y_index;    
-    logic [(`NUM_SAMPLES*2*`ELEM_WIDTH)-1:0] x_reg;
-    logic [(`NUM_SAMPLES*`ELEM_WIDTH)-1:0] y_reg;
-
-    assign x_data = x_reg;
-    assign y_data = y_reg;
-
-    always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
-            state <= READ_X;
-            x_index <= 0;
-            y_index <= 0;
-            x_reg <= 0;
-            y_reg <= 0;
-            error <= 0;
-            ready <= 0;
-        end else begin
-            state <= next_state;
-
-            case (state)
-                IDLE: begin
-                    x_index <= 0;
-                    y_index <= 0;
-                    ready <= 1;
-
-                end
-
-                READ_X: begin
-                    if(input_done) begin 
-                        error <= 1;
-                    end
-
-                    if (enter_pulse && x_index < `NUM_SAMPLES * 2) begin
-                        x_reg[(x_index)*`ELEM_WIDTH +: `ELEM_WIDTH] <= 'd1;  //Include the bias
-                        x_reg[(x_index+1)*`ELEM_WIDTH +: `ELEM_WIDTH] <= data_in;
-                        x_index <= x_index + 2;
-                    end
-                end
-
-                READ_Y: begin
-                    if(input_done) begin 
-                        error <= 1;
-                    end
-
-                    if (enter_pulse && y_index < `NUM_SAMPLES) begin
-                        y_reg[y_index*`ELEM_WIDTH +: `ELEM_WIDTH] <= data_in;
-                        y_index <= y_index + 1;
-                    end
-                end
-            endcase
-
-        end
-    end
+    assign y_data = {
+        32'd3,
+        32'd6,
+        32'd9,
+    };
 
 
-    always_comb begin
-        next_state = state;
-        case (state)
-            IDLE: 
-                if (y_index >= 1) begin
-                    next_state = READ_X;
-                end
-            READ_X: 
-                if (x_index >= `NUM_SAMPLES * 2) begin
-                    next_state = READ_Y;
-                end
-            READ_Y: 
-                if (y_index >= `NUM_SAMPLES) begin
-                    next_state = IDLE;
-                end
-        endcase
-    end
+    assign error = 0;
+    assign ready = 1;
 
 endmodule
 
@@ -438,8 +361,8 @@ module unpack_C
   )
   (
     input  logic [2*`RESULT_WIDTH-1:0] C_packed,
-    output logic signed [`RESULT_WIDTH-1:0] C00,  // element [0][0]
-    output logic signed [`RESULT_WIDTH-1:0] C10   // element [1][0]
+    output logic signed [`RESULT_WIDTH-1:0] C00,  
+    output logic signed [`RESULT_WIDTH-1:0] C10   
   );
 
   // LSB chunk = C[0][0], MSB chunk = C[1][0]
@@ -449,11 +372,11 @@ module unpack_C
 endmodule
 
 module split_digits #(
-    parameter RESULT_WIDTH = 8  // Width of the input number
+    parameter RESULT_WIDTH = 8  
 )(
-    input  logic signed [`RESULT_WIDTH-1:0] num,  // Input number (signed)
-    output logic [3:0] tens,                     // Tens place
-    output logic [3:0] ones                      // Ones place
+    input  logic signed [`RESULT_WIDTH-1:0] num,  
+    output logic [3:0] tens,                     
+    output logic [3:0] ones                    
 );
 
     // Get absolute value for display purposes
