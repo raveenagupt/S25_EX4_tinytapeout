@@ -1,39 +1,4 @@
-# 18-224/624 S25 Tapeout Template
 
-
-1. Add your verilog source files to `source_files` in `info.yaml`. The top level of your chip should remain in `chip.sv` and be named `my_chip`
-
-  
-  
-
-2. Optionally add other details about your project to `info.yaml` as well (this is only for GitHub - your final project submission will involve submitting these in a different format)
-
-3. Do NOT edit `toplevel_chip.v`  `config.tcl` or `pin_order.cfg`
-
- # Final Project Submission Details 
-  
-1. Your design must synthesize at 30MHz but you can run it at any arbitrarily-slow frequency (including single-stepping the clock) on the manufactured chip. If your design must run at an exact frequency, it is safest to choose a lower frequency (i.e. 5MHz)
-
-  
-
-2. For your final project, we will ask you to submit some sort of testbench to verify your design. Include all relevant testing files inside the `testbench` repository
-
-  
-  
-
-3. For your final project, we will ask you to submit documentation on how to run/test your design, as well as include your project proposal and progress reports. Include all these files inside the `docs` repository
-
-  
-  
-
-4. Optionally, if you use any images in your documentation (diagrams, waveforms, etc) please include them in a separate `img` repository
-
-
-  
-
-5. Feel free to edit this file and include some basic information about your project (short description, inputs and outputs, diagrams, how to run, etc). An outline is provided below
-
-# Final Project Example Template
 
 
 ## Project Name
@@ -78,4 +43,4 @@ An IO table listing all of your inputs and outputs and their function, like the 
 
 Connect the PMODs. Toggle the reset button. Insert the three X values (with a corresponding "Enter" button afterwards). Insert the three Y values (with corresponding "Enter".) Watch the OLED display the value. 
 
-## More information on the docs section.
+## More information in the docs section.
