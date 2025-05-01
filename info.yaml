@@ -15,33 +15,42 @@ project:
 #
 # This info will be automatically collected and used to make a datasheet for the chip.
 documentation: 
-  author:       "PLACEHOLDER"      # Your name
-  discord:      ""      # Your discord handle
-  title:        "PLACEHOLDER"      # Project title
-  description:  "PLACEHOLDER"      # Short description of what your project does
-  how_it_works: "PLACEHOLDER"      # Longer description of how the project works
-  how_to_test:  "PLACEHOLDER"      # Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
-  external_hw:  "PLACEHOLDER"      # Describe any external hardware needed
-  language:     "verilog" # other examples include Verilog, Amaranth, VHDL, etc
-  doc_link:     ""      # URL to longer form documentation, eg the README.md in your repository
-  clock_hz:     1000       # Clock frequency in Hz (if required)
-  picture:      ""      # relative path to a picture in your repository
-  inputs:               # a description of what the inputs do
-    - none
-    - none
-    - none
-    - none
-    - none
-    - none
-    - none
-    - none
-  outputs:
-    - none
-    - none
-    - none
-    - none
-    - none
-    - none
-    - none
-    - none
+  author:       Raveena Gupta 
+  discord:      "N/A"      
+  title:        Linear Regression Calculator      # Project title
+  description:  Produces the "y = mx + b" of a 3x2 matrix (x,y).     # Short description of what your project does
+  how_it_works: The user enters the X and Y values on a keypad PMOD (In total, 6 single digit values) and the OLED displays the linear regression model. 
+  how_to_test:  Needs to be more than 6.25 MHZ
+  external_hw:  Need to attach keypad PMOD and corresponding OLED PMOD to the input/output pins.    # Describe any external hardware needed
+  language:     "verilog"
+  doc_link:     ""      
+  clock_hz:     1000       
+  picture:      ""      
+  outputs:           
+    - OLED PMOD with the following pins:
+    - CS (1)
+    - SPI (2)
+    - SDIN (3)
+    - SCLK (4)
+    - D/C (7)
+    - RES (8)
+    - VBATC (9)
+    - VDDC (10)
+    - GND (5,11)
+    - VCC (6,12)
+    
+  inputs:
+    - Keypad PMOD with the following pins:
+    - COL4 (1)
+    - COL3 (2)
+    - COL2 (3)
+    - COL1 (4)
+    - GND (5)
+    - VCC (6)
+    - ROW4 (7)
+    - ROW3 (8)
+    - ROW2 (9)
+    - ROW1 (10)
+    - GND (11)
+    - VCC (12)
 
