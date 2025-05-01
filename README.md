@@ -28,6 +28,7 @@
 
 4. Optionally, if you use any images in your documentation (diagrams, waveforms, etc) please include them in a separate `img` repository
 
+
   
 
 5. Feel free to edit this file and include some basic information about your project (short description, inputs and outputs, diagrams, how to run, etc). An outline is provided below
@@ -40,6 +41,12 @@
 Linear Regression Calculator
 
 The user gives a 3x2 (x,y) datapoint on a KEYPAD and the OLED displays the linear regression equation. 
+
+Here is a working demo:
+https://youtube.com/shorts/59fyLhhhODE?si=8yNVz1InCA2EF3Xw
+
+![image](https://github.com/user-attachments/assets/e77e799d-f0e9-41d6-bf23-ba0f8c90a0f2)
+
 
 ## IO
 
