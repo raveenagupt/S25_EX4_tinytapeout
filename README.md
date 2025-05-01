@@ -47,6 +47,8 @@ https://youtube.com/shorts/59fyLhhhODE?si=8yNVz1InCA2EF3Xw
 
 ![image](https://github.com/user-attachments/assets/e77e799d-f0e9-41d6-bf23-ba0f8c90a0f2)
 
+(The letter E indicates that we have inputted our data)
+
 
 ## IO
 
