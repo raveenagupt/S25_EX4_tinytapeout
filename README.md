@@ -76,4 +76,6 @@ An IO table listing all of your inputs and outputs and their function, like the 
 
 ## How to Test
 
-Connect the PMODs. Toggle the reset button. Insert the three X values (with a corresponding "Enter" button afterwards). Insert the three Y values (with corresponding "Enter".) Watch the OLED display the value.
+Connect the PMODs. Toggle the reset button. Insert the three X values (with a corresponding "Enter" button afterwards). Insert the three Y values (with corresponding "Enter".) Watch the OLED display the value. 
+
+## More information on the docs section.
