@@ -228,125 +228,125 @@ module linear_regression #(
     logic flag_final;
     logic signed [`RESULT_WIDTH-1:0] C00, C10;
 
-//   unpack_C #(.RESULT_WIDTH(`RESULT_WIDTH))
-//   uut_unpack (
-//     .C_packed(C_out_iny),
-//     .C00(C00),
-//     .C10(C10)
-//   );
+  unpack_C #(.RESULT_WIDTH(`RESULT_WIDTH))
+  uut_unpack (
+    .C_packed(C_out_iny),
+    .C00(C00),
+    .C10(C10)
+  );
   
 
-//   split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_slope (
-//     .num  (C10),
-//       .tens (slope_ten),
-//       .ones (slope_one)
-//   );
+  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_slope (
+    .num  (C10),
+      .tens (slope_ten),
+      .ones (slope_one)
+  );
 
-//   split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_b (
-//     .num  (C00),
-//       .tens (b_ten),
-//       .ones (b_one)
-//   );
+  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_b (
+    .num  (C00),
+      .tens (b_ten),
+      .ones (b_one)
+  );
 
-//   split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_det (
-//       .num  (det),
-//       .tens (det_ten),
-//       .ones (det_one)
-//   );
-// input_matrix #(
-//         .ELEM_WIDTH(`ELEM_WIDTH),
-//         .NUM_SAMPLES(`NUM_SAMPLES)
-//     ) matrix_xy (
-//         .clk(clk),
-//         .rst(rst),
-//         .enter(enter),
-//         .input_done(input_done),
-//         .data_in(data_in),
-//         .x_data(X_in),
-//         .y_data(y_in),
-//         .error(error_values),
-//         .ready(ready_input_matrix)
-//     );
+  split_digits #(.RESULT_WIDTH(`RESULT_WIDTH)) sd_det (
+      .num  (det),
+      .tens (det_ten),
+      .ones (det_one)
+  );
+input_matrix #(
+        .ELEM_WIDTH(`ELEM_WIDTH),
+        .NUM_SAMPLES(`NUM_SAMPLES)
+    ) matrix_xy (
+        .clk(clk),
+        .rst(rst),
+        .enter(enter),
+        .input_done(input_done),
+        .data_in(data_in),
+        .x_data(X_in),
+        .y_data(y_in),
+        .error(error_values),
+        .ready(ready_input_matrix)
+    );
 
-    // Transpose of X
-    // matrix_transpose #(
-    //     .N_ROWS(`NUM_SAMPLES),
-    //     .N_COLS(`NUM_FEATURES),
-    //     .ELEM_WIDTH(`ELEM_WIDTH)
-    // ) transpose_X (
-    //     .clk(clk),
-    //     .rst(rst),
-    //     .start(ready_input_matrix),
-    //     .A_in(X_in),
-    //     .A_transpose(X_transpose),
-    //     .done(done_transpose)
-    // );
+    Transpose of X
+    matrix_transpose #(
+        .N_ROWS(`NUM_SAMPLES),
+        .N_COLS(`NUM_FEATURES),
+        .ELEM_WIDTH(`ELEM_WIDTH)
+    ) transpose_X (
+        .clk(clk),
+        .rst(rst),
+        .start(ready_input_matrix),
+        .A_in(X_in),
+        .A_transpose(X_transpose),
+        .done(done_transpose)
+    );
 
-    // Compute X^T * X
-    // matrix_multiply #(
-    //     .ROWS_A(`NUM_FEATURES),
-    //     .COLS_A(`NUM_SAMPLES),
-    //     .COLS_B(`NUM_FEATURES),
-    //     .ELEM_WIDTH(`ELEM_WIDTH),
-    //     .RESULT_WIDTH(`RESULT_WIDTH)
-    // ) multiply_XTX (
-    //     .clk(clk),
-    //     .rst(rst),
-    //     .start(done_transpose),
-    //     .A_in(X_transpose),
-    //     .B_in(X_in),
-    //     .C_out(X_transpose_X),
-    //     .done(done_multiply_XTX)
-    // );
+    Compute X^T * X
+    matrix_multiply #(
+        .ROWS_A(`NUM_FEATURES),
+        .COLS_A(`NUM_SAMPLES),
+        .COLS_B(`NUM_FEATURES),
+        .ELEM_WIDTH(`ELEM_WIDTH),
+        .RESULT_WIDTH(`RESULT_WIDTH)
+    ) multiply_XTX (
+        .clk(clk),
+        .rst(rst),
+        .start(done_transpose),
+        .A_in(X_transpose),
+        .B_in(X_in),
+        .C_out(X_transpose_X),
+        .done(done_multiply_XTX)
+    );
 
-    // // Compute X^T * y
-    // matrix_multiply #(
-    //     .ROWS_A(`NUM_FEATURES),
-    //     .COLS_A(`NUM_SAMPLES),
-    //     .COLS_B(1),
-    //     .ELEM_WIDTH(`ELEM_WIDTH),
-    //     .RESULT_WIDTH(`RESULT_WIDTH)
-    // ) multiply_XTy (
-    //     .clk(clk),
-    //     .rst(rst),
-    //     .start(done_transpose),
-    //     .A_in(X_transpose),
-    //     .B_in(y_in),
-    //     .C_out(XT_y),
-    //     .done(done_multiply_XTy)
-    // );
+    // Compute X^T * y
+    matrix_multiply #(
+        .ROWS_A(`NUM_FEATURES),
+        .COLS_A(`NUM_SAMPLES),
+        .COLS_B(1),
+        .ELEM_WIDTH(`ELEM_WIDTH),
+        .RESULT_WIDTH(`RESULT_WIDTH)
+    ) multiply_XTy (
+        .clk(clk),
+        .rst(rst),
+        .start(done_transpose),
+        .A_in(X_transpose),
+        .B_in(y_in),
+        .C_out(XT_y),
+        .done(done_multiply_XTy)
+    );
 
-    // // Inverse of X^T * X
-    // inverse #(
-    //     .ELEM_WIDTH(`RESULT_WIDTH),
-    //     .RESULT_WIDTH(`RESULT_WIDTH)
-    // ) inverse_XTX (
-    //     .clk(clk),
-    //     .rst(rst),
-    //     .start(done_multiply_XTX),
-    //     .A_in(X_transpose_X),
-    //     .A_inv(X_inv),
-    //     .invalid(error_det),
-    //     .done(done_inverse),
-    //     .det(det)
-    // );
+    // Inverse of X^T * X
+    inverse #(
+        .ELEM_WIDTH(`RESULT_WIDTH),
+        .RESULT_WIDTH(`RESULT_WIDTH)
+    ) inverse_XTX (
+        .clk(clk),
+        .rst(rst),
+        .start(done_multiply_XTX),
+        .A_in(X_transpose_X),
+        .A_inv(X_inv),
+        .invalid(error_det),
+        .done(done_inverse),
+        .det(det)
+    );
 
-    // Final Regression: (X^T X)^-1 * (X^T y)
-    // matrix_multiply #(
-    //   .ROWS_A(`NUM_SAMPLES),
-    //     .COLS_A(`NUM_FEATURES),
-    //     .COLS_B(1),
-    //     .ELEM_WIDTH(`ELEM_WIDTH),
-    //     .RESULT_WIDTH(`RESULT_WIDTH)
-    // ) multiply_final (
-    //     .clk(clk),
-    //     .rst(rst),
-    //     .start(done_multiply_XTy),
-    //     .A_in(X_inv),
-    //     .B_in(XT_y),
-    //     .C_out(C_out_iny),
-    //     .done(done_multiply_iny)
-    // );
+    Final Regression: (X^T X)^-1 * (X^T y)
+    matrix_multiply #(
+      .ROWS_A(`NUM_SAMPLES),
+        .COLS_A(`NUM_FEATURES),
+        .COLS_B(1),
+        .ELEM_WIDTH(`ELEM_WIDTH),
+        .RESULT_WIDTH(`RESULT_WIDTH)
+    ) multiply_final (
+        .clk(clk),
+        .rst(rst),
+        .start(done_multiply_XTy),
+        .A_in(X_inv),
+        .B_in(XT_y),
+        .C_out(C_out_iny),
+        .done(done_multiply_iny)
+    );
 
   
 endmodule
