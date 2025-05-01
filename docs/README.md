@@ -28,33 +28,54 @@
 
 4. Optionally, if you use any images in your documentation (diagrams, waveforms, etc) please include them in a separate `img` repository
 
+
   
 
 5. Feel free to edit this file and include some basic information about your project (short description, inputs and outputs, diagrams, how to run, etc). An outline is provided below
 
 # Final Project Example Template
 
-This is an example outline you can modify and use in your final project submission. You are not required to use this exact template
 
 ## Project Name
 
-A short description of what your project does and how it works. Feel free to include images
+Linear Regression Calculator
+
+The user gives a 3x2 (x,y) datapoint on a KEYPAD and the OLED displays the linear regression equation. 
+
+Here is a working demo:
+https://youtube.com/shorts/59fyLhhhODE?si=8yNVz1InCA2EF3Xw
+
+![image](https://github.com/user-attachments/assets/e77e799d-f0e9-41d6-bf23-ba0f8c90a0f2)
+
+(The letter E indicates that we have inputted our data)
+
 
 ## IO
 
 An IO table listing all of your inputs and outputs and their function, like the one below:
 
-| Input/Output	| Description|																
-|-------------|--------------------------------------------------|
-| io_in[0]    | choose vga mode, when 0 640x480. When 1, 800x480 |
-| io_in[11:1] | unused                                           |
-| io_out[2:0] | Red channel                                      |
-| io_out[5:3] | Green channel                                    |
-| io_out[8:6] | Blue channel                                     |
-| io_out[9]   | HS, horizontal sync                              |
-| io_out[10]  | VS, vertical sync                                |
-| io_out[11]  | liveness check.  Toggles every couple of seconds |
+| Input/Output | Description                                      |
+|--------------|--------------------------------------------------|
+| io_in[0]     | Keypad COL4                                      |
+| io_in[1]     | Keypad COL3                                      |
+| io_in[2]     | Keypad COL2                                      |
+| io_in[3]     | Keypad COL1                                      |
+| io_in[4]     | Keypad ROW4                                      |
+| io_in[5]     | Keypad ROW3                                      |
+| io_in[6]     | Keypad ROW2                                      |
+| io_in[7]     | Keypad ROW1                                      |
+| io_out[0]    | OLED CS (Chip Select)                            |
+| io_out[1]    | OLED SPI / SDIN (MOSI)                           |
+| io_out[2]    | OLED SCLK (Clock)                                |
+| io_out[3]    | OLED D/C (Data/Command select)                   |
+| io_out[4]    | OLED RES (Reset)                                 |
+| io_out[5]    | OLED VBATC (Power Control)                       |
+| io_out[6]    | OLED VDDC (Power Control)                        |
+
+
 
 ## How to Test
 
-A short description of how to test the design post-tapeout
+Connect the PMODs. Toggle the reset button. Insert the three X values (with a corresponding "Enter" button afterwards). Insert the three Y values (with corresponding "Enter".) Watch the OLED display the value. 
+
+## More information on the docs section.
