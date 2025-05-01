@@ -1,0 +1,74 @@
+
+MODULE=testbench TESTCASE= TOPLEVEL=top_module TOPLEVEL_LANG=verilog \
+         sim_build/Vtop 
+     -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:105  in set_program_name_in_venv        Using Python virtual environment interpreter at OSS CAD Suite/bin/python
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+     0.00ns INFO     cocotb                             Running on Verilator version 5.019 devel
+     0.00ns INFO     cocotb                             Running tests with cocotb v2.0.0.dev0 from /home/user/oss-cad-suite/lib/python3.8/site-packages/cocotb-2.0.0.dev0-py3.8-linux-x86_64.egg/cocotb
+     0.00ns INFO     cocotb                             Seeding Python random module with 1746067004
+     0.00ns INFO     cocotb.regression                  Found test testbench.input_matrix_error
+     0.00ns INFO     cocotb.regression                  Found test testbench.test_all_cases
+     0.00ns INFO     cocotb.regression                  running input_matrix_error (1/2)
+
+Running Test Case: Invalid Input
+PASS: We did not input all the data or invalid data was inserted
+   270.00ns INFO     cocotb.regression                  input_matrix_error passed
+   270.00ns INFO     cocotb.regression                  running test_all_cases (2/2)
+
+Running Test Case: Easy
+
+==== Simulation Output ====
+Regression Output (C_out_iny): 1111111111111111111111111100111000000000000000000000000100101100
+Determinant: 50
+Error Detected (det): 0
+Error in Values: 0
+C[0][0] = 300
+C[1][0] = -50
+The final linear equation is y = -50/50x + 300/50
+
+Running Test Case: Hard
+
+==== Simulation Output ====
+Regression Output (C_out_iny): 1111111111111111111110111100010000000000000000010101111110001110
+Determinant: 2886
+Error Detected (det): 0
+Error in Values: 0
+C[0][0] = 89998
+C[1][0] = -1084
+The final linear equation is y = -1084/2886x + 89998/2886
+
+Running Test Case: Hard
+
+==== Simulation Output ====
+Regression Output (C_out_iny): 1111111111111111111101101101110000000000000110000110110010101000
+Determinant: 695040
+Error Detected (det): 0
+Error in Values: 0
+C[0][0] = 1600680
+C[1][0] = -2340
+The final linear equation is y = -2340/695040x + 1600680/695040
+
+Running Test Case: INVALID
+
+==== Simulation Output ====
+Regression Output (C_out_iny): 0000000000000000000000000000000000000000000000000000000000000000
+Determinant: 0
+Error Detected (det): 1
+Error in Values: 0
+C[0][0] = 0
+C[1][0] = 0
+The final linear equation is y = 0/0x + 0/0
+PASS: Determinant error flagged (likely non-invertible matrix). Check input data.
+  1350.00ns INFO     cocotb.regression                  test_all_cases passed
+  1350.00ns INFO     cocotb.regression                  **************************************************************************************
+                                                        ** TEST                          STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        **************************************************************************************
+                                                        ** testbench.input_matrix_error   PASS         270.00           0.00      58018.66  **
+                                                        ** testbench.test_all_cases       PASS        1080.00           0.02      57677.94  **
+                                                        **************************************************************************************
+                                                        ** TESTS=2 PASS=2 FAIL=0 SKIP=0               1350.00           0.14       9849.72  **
+                                                        **************************************************************************************
+                                                        
+
+- :0: Verilog $finish
+make[1]: Leaving directory '/home/user/Desktop/full_proj'
