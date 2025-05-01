@@ -34,11 +34,11 @@
 
 # Final Project Example Template
 
-This is an example outline you can modify and use in your final project submission. You are not required to use this exact template
 
 ## Project Name
 
-A short description of what your project does and how it works. Feel free to include images
+This project is a linear regression calculator. The user inputs a 3x2 matrix of x and y values on the PMOD keypad and the OLED displays the linear regression equation.
+
 
 ## IO
 
